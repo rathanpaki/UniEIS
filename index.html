@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UniEIS — Student Portal</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="nav-brand" data-page="home">
+        <div class="nav-logo">U</div>
+        <div class="nav-title">Uni<span>EIS</span></div>
+      </div>
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        type="button"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="navLinks"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <button class="nav-link active" id="nav-home" data-page="home">
+          Home
+        </button>
+        <button class="nav-link" id="nav-dashboard" data-page="dashboard">
+          My Dashboard
+        </button>
+        <button class="nav-link" id="nav-reports" data-page="reports">
+          Transcript
+        </button>
+        <a class="nav-link cta" href="login.html">Student Login</a>
+      </div>
+    </nav>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Home page -->
+    <div id="page-home" class="page active">
+      <section class="hero">
+        <div class="hero-badge">Student Academic Portal · 2025</div>
+        <h1>Your Academic Life,<br /><em>All in One Place</em></h1>
+        <p class="hero-sub">
+          Track your GPA, monitor your attendance, view your weekly schedule,
+          and download your transcript — all from one personal dashboard.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" data-page="dashboard">
+            Open My Dashboard →
+          </button>
+          <button class="btn-outline" data-page="reports">
+            View Transcript
+          </button>
+        </div>
+      </section>
+
+      <div class="stats-strip">
+        <div class="stat-item">
+          <span class="stat-num" data-target="3.72">0</span>
+          <div class="stat-label">Your Current CGPA</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="87" data-suffix="%">0</span>
+          <div class="stat-label">Your Attendance</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="6">0</span>
+          <div class="stat-label">Enrolled Courses</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="94">0</span>
+          <div class="stat-label">Credits Completed</div>
+        </div>
+      </div>
+
+      <section class="slider-section">
+        <h2>Everything You Need to <span>Succeed</span></h2>
+        <div class="slider">
+          <div class="slider-track" id="sliderTrack">
+            <div class="slide slide-1">
+              <div class="slide-num">01</div>
+              <div class="slide-icon">📊</div>
+              <h3>Track Your GPA</h3>
+              <p>
+                View your grades per subject, semester GPA, and CGPA trend
+                across all semesters.
+              </p>
+            </div>
+            <div class="slide slide-2">
+              <div class="slide-num">02</div>
+              <div class="slide-icon">📅</div>
+              <h3>Your Weekly Schedule</h3>
+              <p>
+                See all your classes, labs, and tutorials laid out clearly —
+                never miss a session.
+              </p>
+            </div>
+            <div class="slide slide-3">
+              <div class="slide-num">03</div>
+              <div class="slide-icon">🎓</div>
+              <h3>Official Transcript</h3>
+              <p>
+                Generate and download your official academic transcript for any
+                completed semester.
+              </p>
+            </div>
+          </div>
+          <div class="slider-arrows">
+            <button class="slider-arrow" data-slide="prev">‹</button>
+            <button class="slider-arrow" data-slide="next">›</button>
+          </div>
+        </div>
+        <div class="slider-nav" id="sliderDots">
+          <button class="slider-dot active" data-slide="0"></button>
+          <button class="slider-dot" data-slide="1"></button>
+          <button class="slider-dot" data-slide="2"></button>
+        </div>
+      </section>
+
+      <section class="features-section">
+        <h2>Built for <span>Students</span></h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>GPA Tracker</h3>
+            <p>
+              See your score for every midterm, assignment, and final. Know
+              exactly where you stand in each course at all times.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>Attendance Monitor</h3>
+            <p>
+              Get warned before you fall below the 80% minimum. Track absences
+              per subject so you stay compliant.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h3>Weekly Schedule</h3>
+            <p>
+              Your personalised class timetable for the full semester — with
+              venue, time, and subject details.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔔</div>
+            <h3>Notifications</h3>
+            <p>
+              Assignment deadlines, grade releases, exam dates, and important
+              university announcements in one feed.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Academic Transcript</h3>
+            <p>
+              Generate your official or unofficial transcript filtered by
+              semester and download it in seconds.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Course Details</h3>
+            <p>
+              View all enrolled courses with credit hours, lecturers, current
+              grade, and assessment breakdowns.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <h2>Your Future Starts <span>Today</span></h2>
+        <p>Stay on top of every grade, every class, every deadline.</p>
+        <button class="btn-primary" data-page="dashboard">
+          Open My Dashboard →
+        </button>
+      </section>
+    </div>
+
+    <!-- Dashboard page -->
+    <div id="page-dashboard" class="page">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AF</div>
+          <div class="profile-name">Ahmad Fauzi</div>
+          <div class="profile-id">U2024-IT-0042</div>
+          <div class="profile-badge">Year 3 · IT Faculty</div>
+        </div>
+        <div class="sidebar-label">My Academics</div>
+        <div class="sidebar-item active" data-section="overview">
+          <span class="sidebar-icon">🏠</span>Overview
+        </div>
+        <div class="sidebar-item" data-section="grades">
+          <span class="sidebar-icon">📈</span>My Grades
+        </div>
+        <div class="sidebar-item" data-section="attendance">
+          <span class="sidebar-icon">✅</span>Attendance
+        </div>
+        <div class="sidebar-item" data-section="schedule">
+          <span class="sidebar-icon">📅</span>Schedule
+        </div>
+        <div class="sidebar-item" data-section="courses">
+          <span class="sidebar-icon">📚</span>My Courses
+        </div>
+        <div class="sidebar-label">Other</div>
+        <div class="sidebar-item" data-section="notifications">
+          <span class="sidebar-icon">🔔</span>Notifications
+          <div class="notif-dot"></div>
+        </div>
+        <div class="sidebar-item" data-page="reports">
+          <span class="sidebar-icon">📋</span>My Transcript
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="dash-content">
+        <button
+          class="sidebar-toggle"
+          id="sidebarToggle"
+          type="button"
+          aria-label="Open dashboard menu"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        <!-- Overview section -->
+        <div id="sec-overview" class="dash-section active">
+          <div class="dash-header">
+            <div class="breadcrumb">My Portal <span>/ Overview</span></div>
+            <h2>Welcome back, Ahmad 👋</h2>
+            <p>Semester 2, 2024–2025 · Bachelor of Computer Science (Hons)</p>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card kpi-gold">
+              <div class="kpi-label">My CGPA</div>
+              <div class="kpi-value" id="kpi-cgpa">0.00</div>
+              <div class="kpi-trend up">↑ +0.12 from last semester</div>
+              <div class="kpi-bg-icon">🎓</div>
+            </div>
+            <div class="kpi-card kpi-green">
+              <div class="kpi-label">Attendance Rate</div>
+              <div class="kpi-value" id="kpi-att">0%</div>
+              <div class="kpi-trend up">↑ Above 80% threshold</div>
+              <div class="kpi-bg-icon">✅</div>
+            </div>
+            <div class="kpi-card kpi-blue">
+              <div class="kpi-label">Credits Completed</div>
+              <div class="kpi-value" id="kpi-credits">0</div>
+              <div class="kpi-trend neutral">of 130 required to graduate</div>
+              <div class="kpi-bg-icon">📚</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+              <div class="kpi-label">Current Courses</div>
+              <div class="kpi-value" id="kpi-courses">0</div>
+              <div class="kpi-trend neutral">Enrolled this semester</div>
+              <div class="kpi-bg-icon">📋</div>
+            </div>
+          </div>
+          <div class="charts-row">
+            <div class="chart-card">
+              <h3>My GPA Progress</h3>
+              <p class="chart-sub">
+                Semester GPA from Year 1 through current semester
+              </p>
+              <canvas id="gpaProgressChart" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>My CGPA</h3>
+              <p class="chart-sub">Current cumulative GPA (scale 4.0)</p>
+              <div class="gpa-ring-wrap">
+                <div class="gpa-ring">
+                  <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle
+                      cx="70"
+                      cy="70"
+                      r="58"
+                      fill="none"
+                      stroke="#E8E0D0"
+                      stroke-width="12"
+                    />
+                    <circle
+                      id="gpaRingCircle"
+                      cx="70"
+                      cy="70"
+                      r="58"
+                      fill="none"
+                      stroke="#C9A84C"
+                      stroke-width="12"
+                      stroke-dasharray="364.4"
+                      stroke-dashoffset="364.4"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <div class="gpa-ring-label">
+                    <div class="gpa-ring-value">3.72</div>
+                    <div class="gpa-ring-sub">CGPA</div>
+                  </div>
+                </div>
+                <p
+                  style="
+                    font-size: 13px;
+                    color: var(--text-muted);
+                    text-align: center;
+                  "
+                >
+                  Dean's List threshold:
+                  <strong style="color: var(--gold)">3.70</strong> ✓
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>This Semester's Score Breakdown</h3>
+            <p class="chart-sub">
+              Midterm, assignment, and final scores across all current courses
+            </p>
+            <canvas id="gradeBreakChart" height="120"></canvas>
+          </div>
+        </div>
+
+        <!-- Grades section -->
+        <div id="sec-grades" class="dash-section">
+          <div class="dash-header">
+            <div class="breadcrumb">My Portal <span>/ My Grades</span></div>
+            <h2>My Grades</h2>
+            <p>Assessment scores and final grades for all enrolled courses</p>
+          </div>
+          <div class="filter-bar">
+            <label>Semester:</label>
+            <select
+              class="filter-select"
+              id="gradeSem"
+              data-action="renderGrades"
+            >
+              <option value="sem2">Semester 2, 2025 (Current)</option>
+              <option value="sem1">Semester 1, 2025</option>
+              <option value="sem4">Semester 2, 2024</option>
+              <option value="sem3">Semester 1, 2024</option>
+            </select>
+            <button class="filter-btn" data-action="renderGrades">Load</button>
+          </div>
+          <div class="chart-card" style="margin-bottom: 20px">
+            <h3>Score Comparison</h3>
+            <p class="chart-sub">
+              Midterm vs Final vs Assignment marks per subject
+            </p>
+            <canvas id="gradesBarChart" height="160"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Grade Details</h3>
+            <p class="chart-sub" id="gradeTableLabel">Semester 2, 2025</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Midterm</th>
+                    <th>Final</th>
+                    <th>Assignment</th>
+                    <th>Total</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="gradeTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance section -->
+        <div id="sec-attendance" class="dash-section">
+          <div class="dash-header">
+            <div class="breadcrumb">My Portal <span>/ Attendance</span></div>
+            <h2>My Attendance</h2>
+            <p>
+              Attendance rate per subject — minimum 80% required to sit
+              examinations
+            </p>
+          </div>
+          <div class="charts-row" style="margin-bottom: 20px">
+            <div class="chart-card">
+              <h3>Weekly Attendance Trend</h3>
+              <p class="chart-sub">
+                My overall attendance rate by week this semester
+              </p>
+              <canvas id="attTrendChart" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>Status Summary</h3>
+              <p class="chart-sub">Across all 6 subjects</p>
+              <canvas id="attPieChart" height="200"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>Attendance by Subject</h3>
+            <p class="chart-sub">
+              ⚠ Subjects in red require immediate attention
+            </p>
+            <div class="att-list" id="attList"></div>
+          </div>
+        </div>
+
+        <!-- Schedule section -->
+        <div id="sec-schedule" class="dash-section">
+          <div class="dash-header">
+            <div class="breadcrumb">My Portal <span>/ Schedule</span></div>
+            <h2>My Weekly Schedule</h2>
+            <p>Current week — Semester 2, 2024–2025</p>
+          </div>
+          <div class="chart-card" style="margin-bottom: 20px">
+            <h3>Class Timetable</h3>
+            <p class="chart-sub">Click on any session for details</p>
+            <div class="schedule-grid" id="scheduleGrid"></div>
+          </div>
+          <div class="chart-card">
+            <h3>Upcoming Deadlines</h3>
+            <p class="chart-sub">Next 14 days</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Due Date</th>
+                    <th>Subject</th>
+                    <th>Task</th>
+                    <th>Weight</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="deadlineTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Courses section -->
+        <div id="sec-courses" class="dash-section">
+          <div class="dash-header">
+            <div class="breadcrumb">My Portal <span>/ My Courses</span></div>
+            <h2>My Enrolled Courses</h2>
+            <p>Semester 2, 2024–2025 — 6 courses, 18 credit hours</p>
+          </div>
+          <div class="chart-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Lecturer</th>
+                    <th>Schedule</th>
+                    <th>Room</th>
+                    <th>Grade</th>
+                  </tr>
+                </thead>
+                <tbody id="coursesTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications section -->
+        <div id="sec-notifications" class="dash-section">
+          <div class="dash-header">
+            <div class="breadcrumb">My Portal <span>/ Notifications</span></div>
+            <h2>Notifications</h2>
+            <p>3 unread messages</p>
+          </div>
+          <div class="chart-card">
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Transcript page -->
+    <div id="page-reports" class="page">
+      <div class="reports-wrap">
+        <div class="reports-header">
+          <div class="breadcrumb" style="margin-bottom: 8px">
+            UniEIS <span>/ My Transcript</span>
+          </div>
+          <h2>Academic Transcript</h2>
+          <p>
+            Generate your official academic transcript for any completed
+            semester. Fill in the options below and click Generate.
+          </p>
+        </div>
+
+        <div class="report-filter-card">
+          <h3>🎓 Transcript Options</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Semester *</label>
+              <select class="form-input filter-select" id="rSemester">
+                <option value="">-- Select Semester --</option>
+                <option value="all">All Semesters (Full Transcript)</option>
+                <option value="sem2">Semester 2, 2025 (Current)</option>
+                <option value="sem1">Semester 1, 2025</option>
+                <option value="sem4">Semester 2, 2024</option>
+                <option value="sem3">Semester 1, 2024</option>
+              </select>
+              <div class="field-error" id="err-semester">
+                Please select a semester.
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Document Type *</label>
+              <select class="form-input filter-select" id="rType">
+                <option value="">-- Select Type --</option>
+                <option>Official Transcript</option>
+                <option>Unofficial Transcript</option>
+                <option>Grade Statement</option>
+                <option>Dean's List Certificate</option>
+              </select>
+              <div class="field-error" id="err-type">
+                Please select a document type.
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Language</label>
+              <select class="form-input filter-select">
+                <option>English</option>
+                <option>Bahasa Melayu</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <button
+                class="btn-primary"
+                data-action="generateTranscript"
+                style="width: 100%; padding: 10px 18px"
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-results" id="reportResults">
+          <div class="download-bar">
+            <div>
+              <p id="reportTitle">
+                Official Transcript — Ahmad Fauzi (U2024-IT-0042)
+              </p>
+              <span id="reportMeta"
+                >Generated: — · Full History · Bachelor of Computer Science
+                (Hons)</span
+              >
+            </div>
+            <button class="btn-download" data-action="downloadTranscript">
+              ⬇ Download PDF
+            </button>
+          </div>
+
+          <div class="transcript-card">
+            <div class="transcript-header">
+              <div>
+                <h3>Ahmad Fauzi bin Mohd Noor</h3>
+                <p>
+                  U2024-IT-0042 · Bachelor of Computer Science (Hons) ·
+                  Information Technology
+                </p>
+              </div>
+              <div class="transcript-meta">
+                <div class="transcript-cgpa">3.72</div>
+                <div class="transcript-cgpa-label">Cumulative GPA</div>
+              </div>
+            </div>
+            <div class="transcript-body" id="transcriptBody"></div>
+          </div>
+
+          <div class="chart-card">
+            <h3>My GPA Trend</h3>
+            <p class="chart-sub">Semester GPA across academic history</p>
+            <canvas id="transcriptChart" height="130"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/app.js" defer></script>
+  </body>
+</html>

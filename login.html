@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UniEIS — Student Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="login-shell">
+        <div class="login-brand">
+          <div class="nav-logo">U</div>
+          <div class="login-title">Uni<span>EIS</span> Student Portal</div>
+          <p class="login-lead">
+            Sign in to access your dashboard, grades, attendance, and official
+            transcript.
+          </p>
+          <div class="login-highlights">
+            <div class="login-highlight">
+              Track GPA and attendance in real time.
+            </div>
+            <div class="login-highlight">
+              View your weekly schedule and upcoming deadlines.
+            </div>
+            <div class="login-highlight">
+              Generate official academic transcripts instantly.
+            </div>
+          </div>
+        </div>
+        <div class="login-card">
+          <h2>Student Login</h2>
+          <p class="login-sub">Use your university credentials to continue.</p>
+          <form class="login-form" action="index.html#dashboard" method="get">
+            <label for="loginId">Student ID or Email</label>
+            <input
+              class="form-input"
+              type="text"
+              id="loginId"
+              name="user"
+              placeholder="U2024-IT-0042"
+              required
+            />
+            <label for="loginPass">Password</label>
+            <input
+              class="form-input"
+              type="password"
+              id="loginPass"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
+            <div class="login-options">
+              <label class="check"
+                ><input type="checkbox" name="remember" />Remember me</label
+              >
+              <a class="login-link" href="#">Forgot password?</a>
+            </div>
+            <button class="btn-primary login-submit" type="submit">
+              Sign In
+            </button>
+          </form>
+          <div class="login-footer">
+            <span>New student?</span>
+            <a class="login-link" href="index.html">Explore the portal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
