@@ -38,27 +38,6 @@ A responsive, single-page **student portal UI** (front-end only) built with **HT
 1. Clone the repository
 2. Open `index.html` in your browser
 
-> Some browsers restrict certain features when opening files directly. If something doesn’t work as expected, use the local server option below.
-
-### Option 2: Run with a local web server (recommended)
-
-Using Python:
-
-```bash
-python -m http.server 5500
-```
-
-Then open:
-
-- `http://localhost:5500/index.html`
-- `http://localhost:5500/login.html`
-
-Using Node (if you have it installed):
-
-```bash
-npx serve .
-```
-
 ## How to Use
 
 - Use the top navigation to switch between **Home**, **My Dashboard**, and **Transcript**.
@@ -75,7 +54,3 @@ npx serve .
 - Dashboard: `index.html` → My Dashboard
 - Transcript: `index.html` → Transcript
 - Login: `login.html`
-
-## License
-
-Add a license if you plan to distribute or reuse this project.
