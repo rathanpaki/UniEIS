@@ -35,7 +35,16 @@
         <div class="login-card">
           <h2>Student Login</h2>
           <p class="login-sub">Use your university credentials to continue.</p>
-          <form class="login-form" action="index.html#dashboard" method="get">
+          <form class="login-form" id="loginForm">
+            <div
+              id="loginError"
+              style="
+                color: var(--danger);
+                font-size: 14px;
+                margin-bottom: 12px;
+                display: none;
+              "
+            ></div>
             <label for="loginId">Student ID or Email</label>
             <input
               class="form-input"
@@ -60,7 +69,11 @@
               >
               <a class="login-link" href="#">Forgot password?</a>
             </div>
-            <button class="btn-primary login-submit" type="submit">
+            <button
+              class="btn-primary login-submit"
+              type="submit"
+              id="loginBtn"
+            >
               Sign In
             </button>
           </form>
@@ -71,5 +84,44 @@
         </div>
       </div>
     </div>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("loginBtn");
+          const err = document.getElementById("loginError");
+          const user = document.getElementById("loginId").value;
+          const password = document.getElementById("loginPass").value;
+
+          btn.textContent = "Authenticating...";
+          btn.disabled = true;
+          err.style.display = "none";
+
+          try {
+            const res = await fetch("api/auth/login.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ user, password }),
+            });
+
+            const data = await res.json();
+            if (data.success) {
+              window.location.href = "dashboard.html";
+            } else {
+              err.textContent = data.message;
+              err.style.display = "block";
+              btn.textContent = "Sign In";
+              btn.disabled = false;
+            }
+          } catch (error) {
+            err.textContent = "A network error occurred.";
+            err.style.display = "block";
+            btn.textContent = "Sign In";
+            btn.disabled = false;
+          }
+        });
+    </script>
   </body>
 </html>

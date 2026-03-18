@@ -1,14 +1,7 @@
 "use strict";
 
-// Demo data that drives the dashboard and transcript views.
 let GRADES_DATA = {};
 let GPA_HISTORY = [];
-let SEM_INFO = {
-  sem2: { label: "Semester 2, 2024–2025", gpa: 3.8 },
-  sem1: { label: "Semester 1, 2024–2025", gpa: 3.68 },
-  sem4: { label: "Semester 2, 2023–2024", gpa: 3.55 },
-  sem3: { label: "Semester 1, 2023–2024", gpa: 3.42 },
-};
 let ATTENDANCE_DATA = [];
 let SCHEDULE = {};
 let DEADLINES = [];
@@ -25,62 +18,14 @@ const LECTURERS = [
 let scoreBreakdownGlobal = [];
 let attendanceTrendGlobal = [0, 0, 0, 0, 0, 0, 0];
 
-const PAGES = ["home", "dashboard", "reports"];
+let gradesBarInst;
+let toastTimer;
 
 let navToggle;
 let navOverlay;
 let sidebarToggle;
 let sidebarOverlay;
 
-let dashReady = false;
-let gradesBarInst;
-let tChartInst;
-let slideIdx = 0;
-let sliderTimer;
-let toastTimer;
-
-// Keep the visible page and the URL hash in sync.
-function showPage(page, opts = {}) {
-  const target = PAGES.includes(page) ? page : "home";
-  const resolved = document.getElementById("page-" + target) ? target : "home";
-  document
-    .querySelectorAll(".page")
-    .forEach((p) => p.classList.remove("active"));
-  const pageEl = document.getElementById("page-" + resolved);
-  if (pageEl) pageEl.classList.add("active");
-
-  document
-    .querySelectorAll(".nav-link[data-page]")
-    .forEach((l) => l.classList.remove("active"));
-  const navEl = document.getElementById("nav-" + resolved);
-  if (navEl) navEl.classList.add("active");
-
-  window.scrollTo(0, 0);
-
-  if (resolved === "dashboard") initDash();
-
-  closeNav();
-  closeSidebar();
-
-  if (opts.updateHash !== false) {
-    if (resolved === "home") {
-      history.replaceState(null, "", location.pathname + location.search);
-    } else {
-      location.hash = resolved;
-    }
-  }
-}
-
-function getPageFromHash() {
-  const hash = location.hash.replace("#", "").trim();
-  return PAGES.includes(hash) ? hash : "home";
-}
-
-function routeFromHash() {
-  showPage(getPageFromHash(), { updateHash: false });
-}
-
-// Mobile nav and sidebar helpers.
 function openNav() {
   document.body.classList.add("nav-open");
   if (navToggle) navToggle.setAttribute("aria-expanded", "true");
@@ -111,10 +56,7 @@ function toggleSidebar() {
   else openSidebar();
 }
 
-// Build dashboard widgets once, then reuse the rendered state.
 async function initDash() {
-  if (dashReady) return;
-
   try {
     const res = await fetch("api/dashboard/overview.php");
     if (res.status === 401) {
@@ -176,8 +118,6 @@ async function initDash() {
     const nData = await notifRes.json();
     NOTIFICATIONS = nData.data;
 
-    dashReady = true;
-
     buildGpaProgress();
     buildGradeBreak();
     renderGrades();
@@ -207,10 +147,6 @@ function animNum(id, target, dur, dec, suf = "") {
     else el.textContent = target.toFixed(dec) + suf;
   };
   requestAnimationFrame(step);
-}
-
-function animRing() {
-  // handled in initDash
 }
 
 function buildGpaProgress() {
@@ -435,9 +371,9 @@ function buildAttTrend() {
 function buildAttPie() {
   const el = document.getElementById("attPieChart");
   if (!el || typeof Chart === "undefined") return;
-  const good = ATTENDANCE_DATA.filter((a) => a.pct >= 85).length,
-    warn = ATTENDANCE_DATA.filter((a) => a.pct >= 80 && a.pct < 85).length,
-    bad = ATTENDANCE_DATA.filter((a) => a.pct < 80).length;
+  const good = ATTENDANCE_DATA.filter((a) => a.pct >= 85).length;
+  const warn = ATTENDANCE_DATA.filter((a) => a.pct >= 80 && a.pct < 85).length;
+  const bad = ATTENDANCE_DATA.filter((a) => a.pct < 80).length;
   new Chart(el.getContext("2d"), {
     type: "doughnut",
     data: {
@@ -466,12 +402,11 @@ function buildSchedule() {
   const grid = document.getElementById("scheduleGrid");
   if (!grid) return;
   const days = ["MON", "TUE", "WED", "THU", "FRI"];
-  // JS uses Sunday = 0, so Monday-Friday map to 1-5 here.
   const tod = new Date().getDay();
   grid.innerHTML = days
     .map((d, i) => {
-      const slots = SCHEDULE[d] || [],
-        isToday = i + 1 === tod;
+      const slots = SCHEDULE[d] || [];
+      const isToday = i + 1 === tod;
       return `<div class="sched-day">
       <div class="sched-day-header${isToday ? " today" : ""}">${d}${isToday ? " · Today" : ""}</div>
       ${
@@ -508,10 +443,10 @@ function buildDeadlines() {
 
 function buildCourses() {
   const table = document.getElementById("coursesTable");
-  if (!table) return;
+  if (!table || !GRADES_DATA.sem2) return;
   table.innerHTML = GRADES_DATA.sem2
     .map((g, i) => {
-      const sched = Object.entries(SCHEDULE).find(([d, slots]) =>
+      const sched = Object.entries(SCHEDULE).find(([, slots]) =>
         slots.some((s) => s.course === g.code),
       );
       const slot = sched
@@ -532,8 +467,9 @@ function buildNotifications() {
   const list = document.getElementById("notifList");
   if (!list) return;
   list.innerHTML = NOTIFICATIONS.map(
-    (n) => `
-    <div class="notif-item${n.unread ? " unread" : ""}" data-toast="Marked as read">
+    (
+      n,
+    ) => `<div class="notif-item${n.unread ? " unread" : ""}" data-toast="Marked as read">
       <div class="notif-icon">${n.icon}</div>
       <div>
         <div class="notif-title"><span class="notif-tag tag-${n.tag}">${n.tag.toUpperCase()}</span>${n.title}</div>
@@ -558,188 +494,13 @@ function showSec(sec, el) {
   closeSidebar();
 }
 
-// Home page slider.
-function moveSlide(d) {
-  const count = document.querySelectorAll(".slide").length;
-  if (!count) return;
-  slideIdx = (slideIdx + d + count) % count;
-  updateSlider();
-}
-
-function goToSlide(i) {
-  const count = document.querySelectorAll(".slide").length;
-  if (!count) return;
-  slideIdx = Math.max(0, Math.min(i, count - 1));
-  updateSlider();
-}
-
-function updateSlider() {
-  const track = document.getElementById("sliderTrack");
-  if (!track) return;
-  track.style.transform = `translateX(-${slideIdx * 100}%)`;
-  document
-    .querySelectorAll(".slider-dot")
-    .forEach((d, i) => d.classList.toggle("active", i === slideIdx));
-}
-
-function initSlider() {
-  if (!document.getElementById("sliderTrack")) return;
-  updateSlider();
-  if (sliderTimer) clearInterval(sliderTimer);
-  sliderTimer = setInterval(() => moveSlide(1), 4200);
-}
-
-// Animate the hero counters only when they scroll into view.
-function initCounters() {
-  const targets = document.querySelectorAll("[data-target]");
-  if (!targets.length) return;
-
-  if (!("IntersectionObserver" in window)) {
-    targets.forEach((el) => {
-      const target = parseFloat(el.dataset.target);
-      const suffix = el.dataset.suffix || "";
-      const dec = Number.isInteger(target) ? 0 : 2;
-      el.textContent = target.toFixed(dec) + suffix;
-    });
-    return;
-  }
-
-  const io = new IntersectionObserver((entries) =>
-    entries.forEach((e) => {
-      // Transcript generator.
-      const el = e.target,
-        target = parseFloat(el.dataset.target),
-        suffix = el.dataset.suffix || "",
-        dec = Number.isInteger(target) ? 0 : 2;
-      let s = null;
-      const step = (ts) => {
-        if (!s) s = ts;
-        const p = Math.min((ts - s) / 1300, 1),
-          ease = 1 - Math.pow(1 - p, 3);
-        el.textContent = (target * ease).toFixed(dec) + suffix;
-        if (p < 1) requestAnimationFrame(step);
-        else el.textContent = target.toFixed(dec) + suffix;
-      };
-      requestAnimationFrame(step);
-      io.unobserve(el);
-    }),
-  );
-  targets.forEach((el) => io.observe(el));
-}
-
-// Transcript generator.
-async function generateTranscript() {
-  const sem = document.getElementById("rSemester")?.value;
-  const type = document.getElementById("rType")?.value;
-  let ok = true;
-  if (!sem) {
-    document.getElementById("err-semester").classList.add("show");
-    document.getElementById("rSemester").classList.add("error");
-    ok = false;
-  } else {
-    document.getElementById("err-semester").classList.remove("show");
-    document.getElementById("rSemester").classList.remove("error");
-  }
-  if (!type) {
-    document.getElementById("err-type").classList.add("show");
-    document.getElementById("rType").classList.add("error");
-    ok = false;
-  } else {
-    document.getElementById("err-type").classList.remove("show");
-    document.getElementById("rType").classList.remove("error");
-  }
-  if (!ok) {
-    showToast("⚠ Please fill in all required fields");
-    return;
-  }
-
-  const now = new Date().toLocaleDateString("en-MY", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-  const selText =
-    document.getElementById("rSemester").options[
-      document.getElementById("rSemester").selectedIndex
-    ].text;
-  document.getElementById("reportTitle").textContent =
-    `${type} — Ahmad Fauzi (U2024-IT-0042)`;
-  document.getElementById("reportMeta").textContent =
-    `Generated: ${now} · ${selText} · Bachelor of Computer Science (Hons)`;
-
-  const sems = sem === "all" ? ["sem2", "sem1", "sem4", "sem3"] : [sem];
-
-  for (const s of sems) {
-    if (!GRADES_DATA[s]) {
-      const res = await fetch(`api/grades/index.php?semester=${s}`);
-      const gData = await res.json();
-      GRADES_DATA[s] = gData.data;
-    }
-  }
-
-  document.getElementById("transcriptBody").innerHTML = sems
-    .map((s) => {
-      const data = GRADES_DATA[s],
-        info = SEM_INFO[s];
-      const totalCr = data.reduce((a, g) => a + g.credits, 0);
-      return `<div class="sem-block">
-      <h4>${info.label}<span class="sem-gpa-tag">Semester GPA: ${info.gpa}</span></h4>
-      <div class="table-wrap">
-        <table><thead><tr><th>Code</th><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-        <tbody>${data.map((g) => `<tr><td><code>${g.code}</code></td><td>${g.name}</td><td>${g.credits}</td><td><span class="grade-badge grade-${g.grade[0]}">${g.grade}</span></td></tr>`).join("")}
-        <tr style="background:var(--cream)"><td colspan="2"><strong>Total</strong></td><td><strong>${totalCr}</strong></td><td><strong style="color:var(--gold)">${info.gpa}</strong></td></tr>
-        </tbody></table>
-      </div>
-    </div>`;
-    })
-    .join("");
-
-  if (typeof Chart !== "undefined") {
-    if (tChartInst) tChartInst.destroy();
-    const chartEl = document.getElementById("transcriptChart");
-    if (chartEl) {
-      tChartInst = new Chart(chartEl.getContext("2d"), {
-        type: "line",
-        data: {
-          labels: GPA_HISTORY.map((g) => g.sem),
-          datasets: [
-            {
-              label: "GPA",
-              data: GPA_HISTORY.map((g) => g.gpa),
-              borderColor: "#C9A84C",
-              backgroundColor: "rgba(201,168,76,0.08)",
-              tension: 0.4,
-              fill: true,
-              pointBackgroundColor: "#C9A84C",
-              pointRadius: 6,
-            },
-          ],
-        },
-        options: {
-          plugins: { legend: { display: false } },
-          scales: {
-            y: {
-              min: 3.0,
-              max: 4.0,
-              grid: { color: "#E8E0D0" },
-              ticks: { callback: (v) => v.toFixed(2) },
-            },
-            x: { grid: { display: false } },
-          },
-        },
-      });
-    }
-  }
-
-  const res = document.getElementById("reportResults");
-  res.classList.add("visible");
-  res.scrollIntoView({ behavior: "smooth", block: "start" });
-  showToast("✓ Transcript generated successfully");
-}
-
-function downloadTranscript() {
-  showToast("⬇ Preparing transcript PDF... (demo)");
-  setTimeout(() => showToast("✓ Transcript downloaded successfully"), 1800);
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
 }
 
 async function logoutUser() {
@@ -763,76 +524,17 @@ async function logoutUser() {
   showToast("Logout failed. Try again.");
 }
 
-async function initAuthNav() {
-  const authLink = document.getElementById("navAuthLink");
-  if (!authLink) return;
-
-  try {
-    const res = await fetch("api/dashboard/overview.php", {
-      headers: { Accept: "application/json" },
-    });
-
-    if (!res.ok) {
-      authLink.textContent = "Student Login";
-      authLink.href = "login.html";
-      delete authLink.dataset.action;
-      return;
-    }
-
-    const data = await res.json();
-    if (data.success) {
-      authLink.textContent = "Logout";
-      authLink.href = "#";
-      authLink.dataset.action = "logout";
-      return;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-
-  authLink.textContent = "Student Login";
-  authLink.href = "login.html";
-  delete authLink.dataset.action;
-}
-
-// Small toast messages for quick feedback.
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
-}
-
-// Shared click and change handlers keep the markup simple.
 async function runAction(action) {
-  switch (action) {
-    case "renderGrades":
-      await renderGrades();
-      break;
-    case "generateTranscript":
-      await generateTranscript();
-      break;
-    case "downloadTranscript":
-      downloadTranscript();
-      break;
-    case "logout":
-      await logoutUser();
-      break;
-    default:
-      break;
+  if (action === "renderGrades") {
+    await renderGrades();
+    return;
+  }
+  if (action === "logout") {
+    await logoutUser();
   }
 }
 
 function handleClick(e) {
-  const pageEl = e.target.closest("[data-page]");
-  if (pageEl) {
-    e.preventDefault();
-    showPage(pageEl.dataset.page);
-    return;
-  }
-
   const sectionEl = e.target.closest("[data-section]");
   if (sectionEl) {
     e.preventDefault();
@@ -844,16 +546,6 @@ function handleClick(e) {
   if (actionEl) {
     e.preventDefault();
     runAction(actionEl.dataset.action);
-    return;
-  }
-
-  const slideEl = e.target.closest("[data-slide]");
-  if (slideEl) {
-    e.preventDefault();
-    const val = slideEl.dataset.slide;
-    if (val === "prev") moveSlide(-1);
-    else if (val === "next") moveSlide(1);
-    else goToSlide(parseInt(val, 10));
     return;
   }
 
@@ -900,10 +592,5 @@ function initUI() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initUI();
-  initAuthNav();
-  initCounters();
-  initSlider();
-  routeFromHash();
+  initDash();
 });
-
-window.addEventListener("hashchange", routeFromHash);
