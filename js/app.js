@@ -80,6 +80,61 @@ function routeFromHash() {
   showPage(getPageFromHash(), { updateHash: false });
 }
 
+function handleScrollFx() {
+  document.body.classList.toggle("scrolled", window.scrollY > 24);
+}
+
+function getRevealGroup(el) {
+  return (
+    el.closest(
+      ".features-grid, .stats-strip, .kpi-grid, .charts-row, .att-list, .notif-list, .form-grid, .report-results, section, .dash-section, .reports-wrap, .login-shell",
+    ) || document.body
+  );
+}
+
+function initScrollAnimations() {
+  handleScrollFx();
+  window.addEventListener("scroll", handleScrollFx, { passive: true });
+
+  const revealEls = [...document.querySelectorAll("[data-reveal]")];
+  if (!revealEls.length) return;
+
+  const groups = new Map();
+  revealEls.forEach((el) => {
+    const group = getRevealGroup(el);
+    if (!groups.has(group)) groups.set(group, []);
+    groups.get(group).push(el);
+  });
+
+  groups.forEach((els) => {
+    els.forEach((el, idx) => {
+      const delay = Math.min(idx * 80, 520);
+      el.style.setProperty("--reveal-delay", `${delay}ms`);
+    });
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    revealEls.forEach((el) => el.classList.add("reveal-active"));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("reveal-active");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.16, rootMargin: "0px 0px -40px 0px" },
+  );
+
+  revealEls.forEach((el) => {
+    if (el.classList.contains("reveal-active")) return;
+    io.observe(el);
+  });
+}
+
 // Mobile nav and sidebar helpers.
 function openNav() {
   document.body.classList.add("nav-open");
@@ -900,6 +955,7 @@ function initUI() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initUI();
+  initScrollAnimations();
   initAuthNav();
   initCounters();
   initSlider();

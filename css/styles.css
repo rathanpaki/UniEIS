@@ -32,6 +32,29 @@ body {
   overflow-x: hidden;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmerFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-12px);
+    opacity: 0.5;
+  }
+}
+
 .page {
   display: none;
   min-height: 100vh;
@@ -54,12 +77,14 @@ nav {
   padding: 0 40px;
   height: 64px;
   border-bottom: 2px solid var(--gold);
+  animation: fadeInUp 0.5s ease both;
 }
 .nav-brand {
   display: flex;
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  text-decoration: none !important;
 }
 .nav-logo {
   width: 36px;
@@ -73,12 +98,16 @@ nav {
   font-weight: 900;
   color: var(--navy);
   font-size: 18px;
+  transition:
+    transform 0.32s ease,
+    box-shadow 0.32s ease;
 }
 .nav-title {
   font-family: "Playfair Display", serif;
   color: var(--white);
   font-size: 18px;
   font-weight: 700;
+  transition: transform 0.32s ease;
 }
 .nav-title span {
   color: var(--gold);
@@ -145,6 +174,7 @@ nav {
       rgba(29, 52, 97, 0.5) 0%,
       transparent 60%
     );
+  animation: shimmerFloat 8s ease-in-out infinite;
 }
 .hero-badge {
   display: inline-flex;
@@ -160,6 +190,7 @@ nav {
   text-transform: uppercase;
   color: var(--gold);
   position: relative;
+  animation: fadeInUp 0.5s ease 0.1s both;
 }
 .hero-badge::before {
   content: "";
@@ -186,6 +217,7 @@ nav {
   color: var(--white);
   margin-bottom: 24px;
   position: relative;
+  animation: fadeInUp 0.55s ease 0.2s both;
 }
 .hero h1 em {
   color: var(--gold);
@@ -198,12 +230,14 @@ nav {
   line-height: 1.75;
   margin-bottom: 48px;
   position: relative;
+  animation: fadeInUp 0.55s ease 0.3s both;
 }
 .hero-actions {
   display: flex;
   gap: 16px;
   justify-content: center;
   position: relative;
+  animation: fadeInUp 0.55s ease 0.4s both;
 }
 .btn-primary {
   padding: 16px 36px;
@@ -217,10 +251,12 @@ nav {
   cursor: pointer;
   transition: all 0.25s;
   box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+  text-decoration: none !important;
 }
 .btn-primary:hover {
   background: var(--gold-light);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(201, 168, 76, 0.35);
 }
 .btn-outline {
   padding: 16px 36px;
@@ -233,10 +269,47 @@ nav {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.25s;
+  text-decoration: none !important;
 }
 .btn-outline:hover {
   border-color: var(--gold);
   color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.btn-primary:focus,
+.btn-primary:focus-visible,
+.btn-outline:focus,
+.btn-outline:focus-visible,
+.nav-brand:focus,
+.nav-brand:focus-visible {
+  text-decoration: none !important;
+}
+
+body.scrolled nav {
+  border-bottom-color: rgba(201, 168, 76, 0.78);
+}
+
+body.scrolled .nav-logo {
+  transform: rotate(-8deg) scale(0.9);
+  box-shadow: 0 8px 16px rgba(201, 168, 76, 0.22);
+}
+
+body.scrolled .nav-title {
+  transform: translateX(2px);
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.65s ease var(--reveal-delay, 0ms),
+    transform 0.65s ease var(--reveal-delay, 0ms);
+}
+
+.reveal-on-scroll.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .stats-strip {
@@ -251,6 +324,13 @@ nav {
   text-align: center;
   padding: 24px;
   border-right: 1px solid rgba(255, 255, 255, 0.07);
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+}
+.stat-item:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.03);
 }
 .stat-item:last-child {
   border-right: none;
@@ -307,6 +387,10 @@ nav {
   font-family: "Playfair Display", serif;
   position: relative;
   overflow: hidden;
+  transition: transform 0.35s ease;
+}
+.slide:hover {
+  transform: scale(1.01);
 }
 .slide-1 {
   background: linear-gradient(135deg, #1d3461 0%, #0a1628 100%);
@@ -324,6 +408,10 @@ nav {
   right: 60px;
   top: 50%;
   transform: translateY(-50%);
+  transition: transform 0.35s ease;
+}
+.slide:hover .slide-icon {
+  transform: translateY(-50%) scale(1.08);
 }
 .slide-num {
   position: absolute;
@@ -426,11 +514,31 @@ nav {
   border-radius: 8px;
   padding: 32px 26px;
   transition: all 0.3s;
+  animation: fadeInUp 0.55s ease both;
 }
 .feature-card:hover {
   border-color: rgba(201, 168, 76, 0.38);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 18px 26px rgba(10, 22, 40, 0.25);
+}
+.feature-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.feature-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.feature-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.feature-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.feature-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.feature-card:nth-child(6) {
+  animation-delay: 0.3s;
 }
 .feature-icon {
   width: 50px;
@@ -607,6 +715,7 @@ body.nav-open .nav-overlay {
   gap: 32px;
   position: relative;
   z-index: 1;
+  animation: fadeInUp 0.65s ease both;
 }
 .login-brand {
   color: var(--white);
@@ -640,6 +749,12 @@ body.nav-open .nav-overlay {
   padding: 14px 16px;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.7);
+  transition: all 0.25s ease;
+}
+.login-highlight:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 168, 76, 0.35);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .login-card {
@@ -648,6 +763,13 @@ body.nav-open .nav-overlay {
   border-radius: 12px;
   padding: 32px;
   box-shadow: 0 18px 40px rgba(10, 22, 40, 0.25);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 42px rgba(10, 22, 40, 0.3);
 }
 .login-card h2 {
   font-family: "Playfair Display", serif;
@@ -783,6 +905,7 @@ body.nav-open .nav-overlay {
   .hero-actions {
     flex-direction: column;
     width: 100%;
+    max-width: 420px;
   }
   .btn-primary,
   .btn-outline {
@@ -806,6 +929,7 @@ body.nav-open .nav-overlay {
   }
   .login-shell {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
   .login-brand {
     text-align: center;
@@ -830,9 +954,11 @@ body.nav-open .nav-overlay {
   }
   .hero {
     padding: 56px 20px;
+    min-height: calc(100vh - 60px);
   }
   .hero-sub {
     font-size: 15px;
+    margin-bottom: 32px;
   }
   .slide {
     height: 300px;
@@ -846,7 +972,23 @@ body.nav-open .nav-overlay {
   .stat-num {
     font-size: 36px;
   }
+  .slider-section,
+  .features-section,
+  .cta-section {
+    padding: 48px 16px;
+  }
+  .slider-arrow {
+    width: 38px;
+    height: 38px;
+  }
+  .feature-card {
+    padding: 24px 20px;
+  }
   .login-card {
     padding: 24px;
+  }
+  .login-highlight {
+    font-size: 12px;
+    padding: 12px;
   }
 }

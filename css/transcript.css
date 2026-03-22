@@ -11,6 +11,7 @@
   max-width: 1060px;
   margin: 0 auto;
   padding: 48px 40px;
+  animation: fadeUp 0.5s ease both;
 }
 .reports-header {
   margin-bottom: 36px;
@@ -44,6 +45,15 @@
   border-radius: 8px;
   border: 1px solid var(--border);
   padding: 22px;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px rgba(10, 22, 40, 0.08);
+  border-color: rgba(201, 168, 76, 0.5);
 }
 .chart-card h3 {
   font-family: "Playfair Display", serif;
@@ -64,6 +74,13 @@
   border-radius: 8px;
   padding: 26px;
   margin-bottom: 28px;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.report-filter-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(10, 22, 40, 0.08);
 }
 .report-filter-card h3 {
   font-size: 15px;
@@ -139,6 +156,7 @@
   border-radius: 8px;
   padding: 16px 20px;
   margin-bottom: 22px;
+  animation: fadeUp 0.55s ease 0.05s both;
 }
 .download-bar p {
   font-size: 14px;
@@ -162,10 +180,12 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.2s;
+  text-decoration: none !important;
 }
 .btn-download:hover {
   background: var(--navy-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(10, 22, 40, 0.2);
 }
 
 .transcript-card {
@@ -174,6 +194,13 @@
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 22px;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.transcript-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 24px rgba(10, 22, 40, 0.09);
 }
 .transcript-header {
   background: var(--navy);
@@ -311,6 +338,10 @@ tbody td {
   .reports-wrap {
     padding: 32px 20px;
   }
+  .download-bar {
+    align-items: flex-start;
+    gap: 12px;
+  }
   table {
     min-width: 640px;
   }
@@ -329,5 +360,9 @@ tbody td {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
+  }
+  .btn-download {
+    width: 100%;
+    justify-content: center;
   }
 }
